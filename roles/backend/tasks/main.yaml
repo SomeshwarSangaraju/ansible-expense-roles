@@ -52,6 +52,11 @@
     name: mysql
     state: present
 
+- name: Install PyMySQL for Ansible MySQL modules
+  ansible.builtin.package:
+    name: python3-PyMySQL
+    state: present
+
 - name: import shipping data into mysql
   community.mysql.mysql_db:
     state: import
