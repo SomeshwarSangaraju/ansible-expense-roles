@@ -9,16 +9,17 @@
     name: nginx
     state: started
     enabled: yes
-
-- name: remove default dircetory
+  
+- name: remove html directory
   ansible.builtin.file:
-    path: /usr/share/nginx/html/*
     state: absent
+    path: /usr/share/nginx/html/
 
-- name: create dircetory
+- name: create html directory
   ansible.builtin.file:
     path: /usr/share/nginx/html/
     state: directory
+
 
   ansible.builtin.get_url:
     url: https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
