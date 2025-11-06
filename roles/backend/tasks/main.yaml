@@ -70,6 +70,7 @@
 
 - name: Restart backend
   ansible.builtin.service:
+    name: backend
     state: restarted
 
    
