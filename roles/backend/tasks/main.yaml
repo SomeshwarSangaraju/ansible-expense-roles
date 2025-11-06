@@ -19,7 +19,7 @@
     path: /app
     state: directory
 
-- name: Download expense application
+- name: Download backend application
   ansible.builtin.get_url:
     url: https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
     dest: /tmp/backend.zip
@@ -41,3 +41,30 @@
     dest: /etc/systemd/system/backend.service
   notify: daemon reload
 
+- name: start and enable services
+  ansible.builtin.service:
+    name: backend
+    state: started
+    enabled: yes
+
+- name: install mysql
+  ansible.builtin.package:
+    name: mysql
+    state: present
+
+- name: import shipping data into mysql
+  community.mysql.mysql_db:
+    state: import
+    name: all
+    login_host: "{{ MYSQL_HOST }}"
+    login_user: "{{ MYSQL_ROOT_USER }}"
+    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+    target: "{{ item }}"
+  loop:
+  - /app/schema/backend.sql
+
+- name: Restart backend
+  ansible.builtin.service:
+    state: restarted
+
+   
