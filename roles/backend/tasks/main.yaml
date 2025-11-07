@@ -66,7 +66,7 @@
 
 - name: install mysql
   ansible.builtin.package:
-    name: mysql
+    name: mysql-server
     state: present
 
 - name: Check if database exists
@@ -79,6 +79,17 @@
   ansible.builtin.shell: >
     mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} < /app/schema/backend.sql
   when: db_check.stdout == ""
+
+- name: Restart backend
+  ansible.builtin.service:
+    name: backend
+    state: restarted
+
+- name: start and enable services
+  ansible.builtin.service:
+    name: backend
+    state: started
+    enabled: true
 
 # - name: loading mysql data into backend
 #   community.mysql.mysql_db:
@@ -155,15 +166,6 @@
 #     var: query_result.stdout_lines
 
 
-- name: Restart backend
-  ansible.builtin.service:
-    name: backend
-    state: restarted
 
-- name: start and enable services
-  ansible.builtin.service:
-    name: backend
-    state: started
-    enabled: true
 
    
