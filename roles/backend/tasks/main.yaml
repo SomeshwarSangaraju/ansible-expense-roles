@@ -78,27 +78,10 @@
     login_user: "{{ MYSQL_ROOT_USER }}"
     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
 
-# - name: Check if database exists
-#   ansible.builtin.shell: >
-#     mysql -h {{ MYSQL_HOST }} -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES LIKE '{{ mysql_db }}';"
-#   register: db_check
-#   changed_when: false
-
-# - name: Load schema if database does not exist
-#   ansible.builtin.shell: >
-#     mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} < /app/schema/backend.sql
-#   when: db_check.stdout == ""
-
 - name: Restart backend
   ansible.builtin.service:
     name: backend
     state: restarted
-
-- name: start and enable services
-  ansible.builtin.service:
-    name: backend
-    state: started
-    enabled: true
 
 
 

@@ -1,5 +1,2 @@
 MYSQL_ROOT_USER: root
-MYSQL_DB: "mysql"              # the database you want to inspect
-MYSQL_TABLE: "orders" 
-
 
