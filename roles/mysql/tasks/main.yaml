@@ -12,24 +12,25 @@
 - name: setting root password
   ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD}}"
 
-- name: Enable MySQL 8.0 module
-  ansible.builtin.package:
+- name: Enable MySQL 8.0 module stream
+  dnf_module:
     name: mysql
     stream: 8.0
-    state: enabled
-
-- name: Install required dependencies
-  ansible.builtin.package:
-    name:
-      - python3-pip
-      - python3-devel
-      - mysql-community-devel   # instead of mysql-devel
     state: present
 
-- name: Install MySQL Python library
-  ansible.builtin.pip:
+- name: Install MySQL development packages
+  dnf:
+    name:
+      - mysql-community-devel
+      - python3-devel
+      - python3-pip
+    state: present
+
+- name: Install Python MySQL client library
+  pip:
     name: mysqlclient
     executable: pip3
+
 
 
 - name: Show list of databases
