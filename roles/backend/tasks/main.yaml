@@ -78,6 +78,14 @@
     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
     target: /app/schema/backend.sql
 
+# - name: Execute backend.sql on MySQL
+#   community.mysql.mysql_db:
+#     login_host: "{{ mysql_host }}"
+#     login_user: "{{ mysql_user }}"
+#     login_password: "{{ mysql_password }}"
+#     state: import
+#     target: "{{ sql_file }}"
+
 - name: Restart backend
   ansible.builtin.service:
     name: backend
