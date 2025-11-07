@@ -71,7 +71,7 @@
 
 - name: Check if database exists
   ansible.builtin.shell: >
-    mysql -h {{ MYSQL_HOST }} -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES LIKE '{{ mysql_db }}';"
+    mysql -h {{ MYSQL_HOST }} -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES LIKE '{{ expense }}';"
   register: db_check
   changed_when: false
 
