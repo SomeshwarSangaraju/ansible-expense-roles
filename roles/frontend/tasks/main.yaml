@@ -1,14 +1,21 @@
-
 - name: install nginx
   ansible.builtin.package:
     name : nginx
     state: present
 
-  
+- name: start and enable nginx
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+    
 - name: remove html directory
   ansible.builtin.file:
     state: absent
     path: /usr/share/nginx/html/
+
+# - name: remove default content
+#   ansible.builtin.command: rm -rf /usr/share/nginx/html/*
 
 - name: create html directory
   ansible.builtin.file:
@@ -30,12 +37,6 @@
   ansible.builtin.copy:
     src: expense.conf
     dest: /etc/nginx/default.d/expense.conf
-
-- name: start and enable nginx
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: yes
 
 - name: restart nginx
   ansible.builtin.service:
