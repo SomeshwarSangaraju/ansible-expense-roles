@@ -103,12 +103,12 @@
 
 - name: Insert data into ExpenseApp.users table
   ansible.builtin.shell: >
-    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 ExpenseApp -e
+    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 backend -e
     "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
 
 - name: Query all data from ExpenseApp.users
   ansible.builtin.shell: >
-    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 ExpenseApp -e "SELECT * FROM users;"
+    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 backend -e "SELECT * FROM users;"
   register: query_result
 
 - name: Display query result
