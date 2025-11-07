@@ -69,14 +69,14 @@
     name: mysql
     state: present
 
-- name: loading mysql data into backend
-  community.mysql.mysql_db:
-    state: import
-    name: all
-    login_host: "{{ MYSQL_HOST }}"
-    login_user: "{{ MYSQL_ROOT_USER }}"
-    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
-    target: /app/schema/backend.sql
+# - name: loading mysql data into backend
+#   community.mysql.mysql_db:
+#     state: import
+#     name: all
+#     login_host: "{{ MYSQL_HOST }}"
+#     login_user: "{{ MYSQL_ROOT_USER }}"
+#     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+#     target: /app/schema/backend.sql
 
 # - name: Execute backend.sql on MySQL
 #   community.mysql.mysql_db:
@@ -85,6 +85,22 @@
 #     login_password: "{{ mysql_password }}"
 #     state: import
 #     target: "{{ sql_file }}"
+
+
+- name: Insert data into MySQL using shell
+  ansible.builtin.shell: >
+    mysql -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} {{ MYSQL_HOST }} -e
+    "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
+
+- name: Query all data from MySQL using shell
+  ansible.builtin.shell: >
+    mysql -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} {{ MYSQL_HOST }} -e
+    "SELECT * FROM users;"
+  register: query_result
+
+- name: Display query result
+  debug:
+    var: query_result.stdout_lines
 
 - name: Restart backend
   ansible.builtin.service:
