@@ -69,16 +69,14 @@
     name: mysql
     state: present
 
-- name: import shipping data into mysql
+- name: loading mysql data into backend
   community.mysql.mysql_db:
     state: import
     name: all
     login_host: "{{ MYSQL_HOST }}"
     login_user: "{{ MYSQL_ROOT_USER }}"
     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
-    target: "{{ item }}"
-  loop:
-  - /app/schema/backend.sql
+    target: /app/schema/backend.sql
 
 - name: Restart backend
   ansible.builtin.service:
