@@ -10,64 +10,85 @@
     enabled: yes
 
 - name: setting root password
-  ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD}}"
+  ansible.builtin.command: mysql_secure_installation --set-root-pass "{{ MYSQL_ROOT_PASSWORD }}"
 
-- name: Enable MySQL 8.0 module stream
-  ansible.builtin.package: 
-    name: mysql
-    stream: 8.0
-    state: present
+# - name: import shipping data into mysql
+#   community.mysql.mysql_db:
+#     state: import
+#     name: all
+#     login_host: mysql.daws86s.fun
+#     login_user: root
+#     login_password: RoboShop@1
+#     target: "{{ item }}"
+#   loop:
+#   - /app/db/schema.sql
+#   - /app/db/app-user.sql 
+#   - /app/db/master-data.sql
 
-- name: Install MySQL development packages
-  ansible.builtin.package: 
-    name:
-      - mysql-community-devel
-      - python3-devel
-      - python3-pip
-    state: present
+# - name: List all databases
+#   community.mysql.mysql_query:
+#     login_host: "{{ MYSQL_host }}"
+#     login_user: "{{ MYSQL_ROOT_USER }}"
+#     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+#     query: "SHOW DATABASES;"
+#   register: db_list
 
-- name: Install Python MySQL client library
-  ansible.builtin.pip:
-    name: mysqlclient
-    executable: pip3
+# - name: Enable MySQL 8.0 module stream
+#   ansible.builtin.package: 
+#     name: mysql
+#     stream: 8.0
+#     state: present
+
+# - name: Install MySQL development packages
+#   ansible.builtin.package: 
+#     name:
+#       - mysql-community-devel
+#       - python3-devel
+#       - python3-pip
+#     state: present
+
+# - name: Install Python MySQL client library
+#   ansible.builtin.pip:
+#     name: mysqlclient
+#     executable: pip3
 
 
 
-- name: Show list of databases
-  community.mysql.mysql_query:
-    login_host: "{{ MYSQL_HOST }}"
-    login_user: "{{ MYSQL_ROOT_USER }}"
-    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
-    query: "SHOW DATABASES;"
-  register: db_list
+# - name: Show list of databases
+#   community.mysql.mysql_query:
+#     login_host: "{{ MYSQL_HOST }}"
+#     login_user: "{{ MYSQL_ROOT_USER }}"
+#     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+#     query: "SHOW DATABASES;"
+#   register: db_list
 
-- name: Display databases
-  ansible.builtin.debug:
-    msg: "{{ db_list.query_result[0] }}"
+# - name: Display databases
+#   ansible.builtin.debug:
+#     msg: "{{ db_list.query_result[0] }}"
 
-- name: Show tables in selected database
-  community.mysql.mysql_query:
-    login_host: "{{ MYSQL_HOST }}"
-    login_user: "{{ MYSQL_ROOT_USER }}"
-    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
-    login_db: "{{ MYSQL_DB }}"
-    query: "SHOW TABLES;"
-  register: table_list
+# - name: Show tables in selected database
+#   community.mysql.mysql_query:
+#     login_host: "{{ MYSQL_HOST }}"
+#     login_user: "{{ MYSQL_ROOT_USER }}"
+#     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+#     login_db: "{{ MYSQL_DB }}"
+#     query: "SHOW TABLES;"
+#   register: table_list
 
-- name: Display tables
-  ansible.builtin.debug:
-    msg: "{{ table_list.query_result[0] }}"
+# - name: Display tables
+#   ansible.builtin.debug:
+#     msg: "{{ table_list.query_result[0] }}"
 
-- name: Show data from selected table
-  community.mysql.mysql_query:
-    login_host: "{{ MYSQL_HOST }}"
-    login_user: "{{ MYSQL_ROOT_USER }}"
-    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
-    login_db: "{{ MYSQL_DB }}"
-    query: "SELECT * FROM {{ MYSQL_TABLE }} LIMIT 10;"
-  register: table_data
+# - name: Show data from selected table
+#   community.mysql.mysql_query:
+#     login_host: "{{ MYSQL_HOST }}"
+#     login_user: "{{ MYSQL_ROOT_USER }}"
+#     login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+#     login_db: "{{ MYSQL_DB }}"
+#     query: "SELECT * FROM {{ MYSQL_TABLE }} LIMIT 10;"
+#   register: table_data
 
-- name: Display table data (first 10 rows)
-  ansible.builtin.debug:
-    msg: "{{ table_data.query_result[0] }}"
+# - name: Display table data (first 10 rows)
+#   ansible.builtin.debug:
+#     msg: "{{ table_data.query_result[0] }}"
 
