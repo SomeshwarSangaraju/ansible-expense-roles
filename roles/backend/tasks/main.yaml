@@ -69,6 +69,17 @@
     name: mysql
     state: present
 
+- name: Check if database exists
+  ansible.builtin.shell: >
+    mysql -h {{ MYSQL_HOST }} -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES LIKE '{{ mysql_db }}';"
+  register: db_check
+  changed_when: false
+
+- name: Load schema if database does not exist
+  ansible.builtin.shell: >
+    mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} < /app/schema/backend.sql
+  when: db_check.stdout == ""
+
 # - name: loading mysql data into backend
 #   community.mysql.mysql_db:
 #     state: import
@@ -115,38 +126,44 @@
 #   debug:
 #     var: query_result.stdout_lines
 
-- name: Create database if it doesn't exist
-  ansible.builtin.shell: >
-    mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} -e
-    "CREATE DATABASE IF NOT EXISTS {{ mysql_db }};"
+# - name: Create database if it doesn't exist
+#   ansible.builtin.shell: >
+#     mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} -e
+#     "CREATE DATABASE IF NOT EXISTS {{ mysql_db }};"
 
-- name: Create users table if it doesn't exist
-  ansible.builtin.shell: >
-    mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} {{ mysql_db }} -e
-    "CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50),
-        email VARCHAR(50)
-    );"
+# - name: Create users table if it doesn't exist
+#   ansible.builtin.shell: >
+#     mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} {{ mysql_db }} -e
+#     "CREATE TABLE IF NOT EXISTS users (
+#         id INT AUTO_INCREMENT PRIMARY KEY,
+#         name VARCHAR(50),
+#         email VARCHAR(50)
+#     );"
 
-- name: Insert data into users table
-  ansible.builtin.shell: >
-    mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} {{ mysql_db }} -e
-    "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
+# - name: Insert data into users table
+#   ansible.builtin.shell: >
+#     mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} {{ mysql_db }} -e
+#     "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
 
-- name: Query all users
-  ansible.builtin.shell: >
-    mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} {{ mysql_db }} -e "SELECT * FROM users;"
-  register: query_result
+# - name: Query all users
+#   ansible.builtin.shell: >
+#     mysql -h {{ mysql_host }} -u {{ mysql_user }} -p{{ mysql_password }} {{ mysql_db }} -e "SELECT * FROM users;"
+#   register: query_result
 
-- name: Display query results
-  debug:
-    var: query_result.stdout_lines
+# - name: Display query results
+#   debug:
+#     var: query_result.stdout_lines
 
 
 - name: Restart backend
   ansible.builtin.service:
     name: backend
     state: restarted
+
+- name: start and enable services
+  ansible.builtin.service:
+    name: backend
+    state: started
+    enabled: true
 
    
