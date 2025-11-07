@@ -87,14 +87,28 @@
 #     target: "{{ sql_file }}"
 
 
-- name: Insert data into MySQL using shell
+# - name: Insert data into MySQL using shell
+#   ansible.builtin.shell: >
+#     mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 mysql -e
+#     "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
+
+# - name: Query all data from MySQL using shell
+#   ansible.builtin.shell: >
+#     mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 mysql -e "SELECT * FROM users;"
+#   register: query_result
+
+# - name: Display query result
+#   debug:
+#     var: query_result.stdout_lines
+
+- name: Insert data into ExpenseApp.users table
   ansible.builtin.shell: >
-    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 mysql -e
+    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 ExpenseApp -e
     "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
 
-- name: Query all data from MySQL using shell
+- name: Query all data from ExpenseApp.users
   ansible.builtin.shell: >
-    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 mysql -e "SELECT * FROM users;"
+    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 ExpenseApp -e "SELECT * FROM users;"
   register: query_result
 
 - name: Display query result
