@@ -89,18 +89,18 @@
 
 - name: Insert data into MySQL using shell
   ansible.builtin.shell: >
-    mysql -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} {{ MYSQL_HOST }} -e
+    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 mysql -e
     "INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com'), ('Bob', 'bob@example.com');"
 
 - name: Query all data from MySQL using shell
   ansible.builtin.shell: >
-    mysql -u {{ MYSQL_ROOT_USER }} -p{{ MYSQL_ROOT_PASSWORD }} {{ MYSQL_HOST }} -e
-    "SELECT * FROM users;"
+    mysql -h mysql.someshwar.fun -u root -pExpenseApp@1 mysql -e "SELECT * FROM users;"
   register: query_result
 
 - name: Display query result
   debug:
     var: query_result.stdout_lines
+
 
 - name: Restart backend
   ansible.builtin.service:
